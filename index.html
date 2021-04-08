@@ -1,0 +1,92 @@
+<html>
+
+<head>
+  <script src="./main.js" type="module"></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <form id="Foo" class="wrap">
+    <h3>Compound Inputs</h3>
+    <label>Radio:
+      <input type="radio" name="Radio" value="a">a </label><label><input type="radio" name="Radio" value="b">b</label>
+    <br>
+    <label>Checkbox:
+      <input type="checkbox" name="Checkbox"></label>
+    <label>Checkboxes: a
+      <input type="checkbox" name="Checkboxes" value="a"></label><label>
+      b<input type="checkbox" name="Checkboxes" value="b"></label>
+    <br>
+    <label>SelOne:
+      <select name="SelOne">
+        <option value="">?</option>
+        <option value="a">A</option>
+        <option value="b">B</option>
+      </select></label>
+    <label>SelMore:
+      <select name="SelMore" multiple>
+        <option value="">?</option>
+        <option value="a">A</option>
+        <option value="b">B</option>
+      </select></label>
+
+    <h3>Basic Inputs</h3>
+    <label>Text:
+      <input type="text" name="Text"> </label>
+    <label>Textarea:
+      <textarea name="Textarea"></textarea></label>
+    <label>Hidden:[string]
+      <input type="hidden" name="Hidden" value="string"> </label>
+
+    <h4>Bespoke</h4>
+    <label>Range:
+      <input type="range" name="Range" value="10"> </label>
+    <label>Color:
+      <input type="color" name="Color" value="#333333"> </label>
+    <label>Email:
+      <input type="email" name="Email"> </label>
+    <label>Number:
+      <input type="number" name="Number"> </label>
+    <label>Password:
+      <input type="password" name="Password"> </label>
+    <label>Search:
+      <input type="search" name="Search"> </label>
+    <label>Tel:
+      <input type="tel" name="Tel"> </label>
+    <label>Url:
+      <input type="url" name="Url"> </label>
+    <label>Date:
+      <input type="date" name="Date"> </label>
+    <label>Datetime:
+      <input type="datetime-local" name="Datetime-local"> </label>
+    <label>Month:
+      <input type="month" name="Month"> </label>
+    <label>Time:
+      <input type="time" name="Time"> </label>
+    <label>Week:
+      <input type="week" name="Week"> </label>
+
+    <h3>Oddballs (ignore?)</h3>
+
+    <label>Unnamed:
+      <input data-name="unknown" placeholder="no name, no value"> </label>
+    <label>File:
+      <input type="file" name="File"> </label>
+
+    <h4>Submits / No value</h4>
+    <label>Button:
+      <input type="button" name="Button" value="btn"> </label>
+    <label>Image:
+      <input type="image" name="Image"> </label>
+    <label>Submit:
+      <input type="submit" name="Submit"> </label>
+    <label>Reset:
+      <input type="reset" name="Reset"> </label>
+
+  </form>
+
+  <input form="Foo" type="submit">
+
+</body>
+
+</html>

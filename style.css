@@ -1,0 +1,44 @@
+#__bs_notify__ {
+  display: none !important;
+}
+
+body {
+  --corner: 0.2rem;
+}
+
+h3 {
+  text-transform: uppercase;
+}
+h4 {
+  color: gray;
+}
+
+form input,
+form select,
+form textarea {
+  color: red;
+}
+select[multiple] {
+  height: 1.5rem;
+  min-width: 1.5rem;
+  vertical-align: top;
+}
+select[multiple]:focus {
+  height: auto;
+}
+
+.wrap,
+label {
+  border: 1px solid gray;
+  border-radius: var(--corner);
+  display: inline-block;
+  padding: var(--corner) calc(var(--corner) * 2);
+  vertical-align: top;
+}
+
+:indeterminate {
+  border: 1px solid red;
+  outline-color: aqua;
+  outline-style: solid;
+  outline-width: 1px;
+}
