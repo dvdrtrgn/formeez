@@ -1,5 +1,7 @@
 // Q.junk.js
+/*global jQuery, $, */
 //
+import 'https://code.jquery.com/jquery-3.6.0.slim.min.js';
 import Q from './Q.js';
 
 const samples = [
