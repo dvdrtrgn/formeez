@@ -5,12 +5,6 @@ const LS = localStorage;
 // -------------------
 // UTIL
 
-function save(API) {
-  var str = JSON.stringify(API.data);
-
-  LS.setItem(API.name, str);
-}
-
 function backup(API) {
   var str = LS.getItem(API.name);
 
@@ -30,14 +24,21 @@ function restore(API) {
   location.reload(); // TODO remove?
 }
 
-function open(API) {
+function write(API, obj) {
+  var str = JSON.stringify(obj);
+
+  if (str) LS.setItem(API.name, str);
+}
+
+function read(API) {
   var str = LS.getItem(API.name);
+  var data = {};
 
   try {
-    API.data = JSON.parse(str);
+    data = JSON.parse(str);
   } catch(err) {}
 
-  API.data = API.data || {};
+  return data || {};
 }
 
 // -------------------
@@ -56,8 +57,9 @@ function _api_factory(name) {
       value: 'AbstractStorage',
       writable: false,
     },
-    save: {
-      value: () => save(API),
+    data: {
+      get: () => read(API),
+      set: (obj) => write(API, obj),
     },
     backup: {
       value: () => backup(API),
@@ -79,10 +81,7 @@ function AbstractStorage(name) {
 
   // Assign props/meths
   Object.assign(API, {
-    data: {},
   });
-
-  open(API);
 
   return API;
 }

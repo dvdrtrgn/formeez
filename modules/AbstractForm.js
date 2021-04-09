@@ -6,18 +6,22 @@ import Q from './Q.js';
 
 const INPUTS = 'input[name], select[name], textarea[name]';
 
+// -------------------
+// UTIL
+
 function getInputs(form) {
   if (!form) throw 'form needed';
   return Q.all(INPUTS, form);
 }
 
-// -------------------
-// UTIL
-
 function nameHash(arr, obj = {}) {
   arr.forEach(e => (e.name in obj) ? void (0) : obj[e.name] = e);
+
   return obj;
 }
+
+// -------------------
+// INTERNALS
 
 function abstractInputs(API) {
   console.log(API.form)
@@ -31,34 +35,33 @@ function abstractInputs(API) {
   return arr;
 }
 
-function readForm(API) {
+function prepareData(API) {
   var objs = Object.values(API.hash);
   var data = {};
 
   objs.forEach(e => {
     var nom = e.name;
     var val = e.value;
-    console.log('read', nom, val)
+
     data[nom] = val
   });
 
-  return API.data = data;
+  return data;
 }
 
-function loadForm(API) {
+function loadStorage(API) {
   var objs = Object.values(API.hash);
 
   objs.forEach(e => {
     var nom = e.name;
     var val = API.store.data[nom];
-    console.log('load', nom, val)
+
     e.value = val;
   });
 }
 
 function saveForm(API) {
-  API.store.data = API.readForm();
-  API.store.save();
+  API.store.data = API.data;
 }
 
 function initStorage(API) {
@@ -68,7 +71,6 @@ function initStorage(API) {
 function bindEvents(API) {
   API.form.addEventListener('submit', function (evt) {
     // evt.preventDefault();
-    console.log('saveForm');
     saveForm(API);
   });
 }
@@ -92,11 +94,14 @@ function _api_factory(form) {
     hash: {
       get: () => nameHash(API.inputs, {}),
     },
-    read: {
-      value: () => readForm(API),
+    abstractInputs: {
+      get: () => abstractInputs(API),
     },
-    load: {
-      value: () => loadForm(API),
+    data: {
+      get: () => prepareData(API),
+    },
+    loadStorage: {
+      value: () => loadStorage(API),
     },
   });
 
@@ -118,17 +123,14 @@ function AbstractForm(form) {
 
   // Assign props/meths
   Object.assign(API, {
-    d: form,
-    data: null,
-    scanForInputs: function () {
-
-    },
-    inputs: abstractInputs(API),
+    inputs: API.abstractInputs,
+    rawinputs: getInputs(API.form),
   });
 
   bindEvents(API);
   initStorage(API);
-  loadForm(API); // get from storage
+
+  API.loadStorage();
 
   return API;
 }
