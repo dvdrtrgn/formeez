@@ -6,39 +6,42 @@
 </head>
 
 <body>
+  <h1>Form #Foo
+    <button class="big wrap" form="Foo" type="submit">Submit Foo</button>
+  </h1>
+
   <form id="Foo" class="wrap">
-    <h3>Compound Inputs</h3>
+    <h2>Compound Inputs</h2>
     <label>Radio:
-      <input type="radio" name="Radio" value="a">a </label><label><input type="radio" name="Radio" value="b">b</label>
-    <br>
-    <label>Checkbox:
-      <input type="checkbox" name="Checkbox"></label>
+      <input type="radio" name="Radio" value="a">a </label><label class="continued"><input type="radio" name="Radio" value="b">b</label>
     <label>Checkboxes: a
-      <input type="checkbox" name="Checkboxes" value="a"></label><label>
+      <input type="checkbox" name="Checkboxes" value="a"></label><label class="continued">
       b<input type="checkbox" name="Checkboxes" value="b"></label>
-    <br>
-    <label>SelOne:
-      <select name="SelOne">
-        <option value="">?</option>
-        <option value="a">A</option>
-        <option value="b">B</option>
-      </select></label>
     <label>SelMore:
       <select name="SelMore" multiple>
         <option value="">?</option>
         <option value="a">A</option>
         <option value="b">B</option>
       </select></label>
+    <br>
+    <label>Checkbox:
+      <input type="checkbox" name="Checkbox" indeterminate></label>
+    <label>SelOne:
+      <select name="SelOne">
+        <option value="">?</option>
+        <option value="a">A</option>
+        <option value="b">B</option>
+      </select></label>
 
-    <h3>Basic Inputs</h3>
+    <h2>Basic Inputs</h2>
     <label>Text:
       <input type="text" name="Text"> </label>
     <label>Textarea:
       <textarea name="Textarea"></textarea></label>
-    <label>Hidden:[string]
-      <input type="hidden" name="Hidden" value="string"> </label>
+    <label>Hidden:
+      <input type="hidden" name="Hidden" value="string"> (reveal) </label>
 
-    <h4>Bespoke</h4>
+    <h3>Bespoke</h3>
     <label>Range:
       <input type="range" name="Range" value="10"> </label>
     <label>Color:
@@ -48,7 +51,7 @@
     <label>Number:
       <input type="number" name="Number"> </label>
     <label>Password:
-      <input type="password" name="Password"> </label>
+      <input type="password" name="Password" autocomplete> </label>
     <label>Search:
       <input type="search" name="Search"> </label>
     <label>Tel:
@@ -66,26 +69,25 @@
     <label>Week:
       <input type="week" name="Week"> </label>
 
-    <h3>Oddballs (ignore?)</h3>
+    <h2>Oddballs</h2>
 
-    <label>Unnamed:
-      <input data-name="unknown" placeholder="no name, no value"> </label>
+    <h3>Stores but cannot restore</h3>
     <label>File:
       <input type="file" name="File"> </label>
 
-    <h4>Submits / No value</h4>
-    <label>Button:
-      <input type="button" name="Button" value="btn"> </label>
-    <label>Image:
-      <input type="image" name="Image"> </label>
-    <label>Submit:
-      <input type="submit" name="Submit"> </label>
-    <label>Reset:
-      <input type="reset" name="Reset"> </label>
+    <h3>No name / No value</h3>
+    <label>unnamed:
+      <input data-name="unknown" placeholder="no name, no value"> </label>
+    <label>button:
+      <input type="button" noname="Button" value="btn"> </label>
+    <label>reset:
+      <input type="reset" noname="Reset"> </label>
+    <label>submit:
+      <input type="submit" noname="Submit"> </label>
+    <label>image(submit):
+      <input type="image" noname="Image"> </label>
 
   </form>
-
-  <input form="Foo" type="submit">
 
 </body>
 

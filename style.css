@@ -1,21 +1,18 @@
-#__bs_notify__ {
-  display: none !important;
+/*  */
+:root {
+  --gap: 0.25rem;
+  background-color: #eee;
 }
 
-body {
-  --corner: 0.2rem;
-}
-
-h3 {
-  text-transform: uppercase;
-}
-h4 {
+h1, h2, h3 {
   color: gray;
+  font-family: sans-serif;
+  margin-bottom: var(--gap);
 }
 
-form input,
-form select,
-form textarea {
+input,
+select,
+textarea {
   color: red;
 }
 select[multiple] {
@@ -26,19 +23,40 @@ select[multiple] {
 select[multiple]:focus {
   height: auto;
 }
+textarea {
+  vertical-align: middle;
+}
+
+label.continued {
+  border-left: none;
+  margin-left: -1px;
+}
 
 .wrap,
 label {
+  background-color: white;
   border: 1px solid gray;
-  border-radius: var(--corner);
+  border-radius: var(--gap);
   display: inline-block;
-  padding: var(--corner) calc(var(--corner) * 2);
+  margin-bottom: var(--gap);
+  padding: var(--gap) calc(var(--gap) * 2);
   vertical-align: top;
 }
 
+/* flag this elusive state, if possible */
 :indeterminate {
-  border: 1px solid red;
-  outline-color: aqua;
+  border: 1px solid lime;
+  outline-color: lime;
   outline-style: solid;
   outline-width: 1px;
+}
+
+/* fancy stuff */
+
+.big {
+  font-size: 1.5rem;
+}
+
+#__bs_notify__ {
+  /* display: none !important; */
 }

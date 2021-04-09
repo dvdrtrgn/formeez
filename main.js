@@ -15,21 +15,29 @@ var API = {
   },
 };
 
+function preTweak() {
+
+  // Q.all('*').forEach(function (ele) {
+  //   ele.indeterminate = true;
+  // });
+
+  Q.all('input[type=hidden]').forEach(function (ele) {
+    ele.parentElement.addEventListener('click', function () {
+      this.firstElementChild.type = 'text';
+    });
+  });
+
+}
+
 function init() {
   var form = Q.one('#Foo');
+  preTweak();
 
   form = AbstractForm.make(form);
 
   Util.export_to({ Main: API, form, Q, Util }, window)
 
   console.table(API);
-
-  Q.all('input[type=hidden]').forEach(function (e) {
-    e.parentElement.addEventListener('click', function () {
-      this.firstElementChild.type = 'text';
-    });
-  });
-
 }
 
 Util.ready(init);

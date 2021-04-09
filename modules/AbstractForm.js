@@ -34,23 +34,18 @@ function readForm(obj) {
   return obj.data = data;
 }
 
-function fillForm(obj) {
+function loadForm(obj) {
   var inputs = obj.inputs;
 
   inputs.forEach(e => {
     var nom = e.name;
     var val = obj.store.data[nom];
-    console.log('fill', nom, val)
+
     e.value = val;
   });
 }
 
 function saveForm(obj) {
-  obj.store.data = obj.readForm();
-  obj.store.save();
-}
-
-function loadForm(obj) {
   obj.store.data = obj.readForm();
   obj.store.save();
 }
@@ -85,7 +80,7 @@ function make(form) {
 
   bindEvents(obj);
   initStorage(obj);
-  fillForm(obj);
+  loadForm(obj);
 
   return obj;
 }
