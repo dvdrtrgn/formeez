@@ -8,81 +8,86 @@ function getInputs(form) {
   return Q.all('input[name], select[name], textarea[name]', form);
 }
 
+function nameHash(arr, obj = {}) {
+  arr.forEach(e => (e.name in obj) ? void (0) : obj[e.name] = e);
+  return obj;
+}
+
 function abstractInputs(form) {
-  var inputs = getInputs(form);
+  var objs = getInputs(form);
   var arr = [];
 
-  inputs.forEach(function (e) {
+  objs.forEach(function (e) {
     arr.push(AbstractInput(e));
   });
 
   return arr;
 }
 
-function readForm(obj) {
-  var inputs = obj.inputs;
+function readForm(self) {
+  var objs = self.inputs;
   var data = {};
 
-  inputs.forEach(e => {
+  objs.forEach(e => {
     var nom = e.name;
-    if (!nom) return;
     var val = e.value;
 
     data[nom] = val
   });
 
-  return obj.data = data;
+  return self.data = data;
 }
 
-function loadForm(obj) {
-  var inputs = obj.inputs;
+function loadForm(self) {
+  var inputs = self.inputs;
 
   inputs.forEach(e => {
     var nom = e.name;
-    var val = obj.store.data[nom];
-
+    var val = self.store.data[nom];
+    console.log('fill', nom, val)
     e.value = val;
   });
 }
 
-function saveForm(obj) {
-  obj.store.data = obj.readForm();
-  obj.store.save();
+function saveForm(self) {
+  self.store.data = self.readForm();
+  self.store.save();
 }
 
-function initStorage(obj) {
-  obj.store = AbstractStorage.make(obj.form.name);
+function initStorage(self) {
+  self.store = AbstractStorage.make(self.form.name);
 }
 
-function bindEvents(obj) {
-  obj.form.addEventListener('submit', function (evt) {
+function bindEvents(self) {
+  self.form.addEventListener('submit', function (evt) {
     // evt.preventDefault();
     console.log('saveForm');
-    saveForm(obj);
+    saveForm(self);
   });
 }
 
 function make(form) {
-  var obj;
+  var self;
   form = Q.one(form); // normalize for one
 
   if (!form) throw 'nothing there';
   if (!form.nodeName === 'FORM') throw 'not a form';
   if (!form.name) form.name = form.id;
 
-  obj = {
+  self = {
     form,
-    readForm: () => readForm(obj),
-    loadForm: () => loadForm(obj),
+    readForm: () => readForm(self),
+    loadForm: () => loadForm(self),
   };
 
-  obj.inputs = abstractInputs(form);
+  self.inputs = abstractInputs(form);
+  self.hash = nameHash(self.inputs, {})
 
-  bindEvents(obj);
-  initStorage(obj);
-  loadForm(obj);
+  bindEvents(self);
+  initStorage(self);
+  loadForm(self);
 
-  return obj;
+  return self;
 }
 
 export default { make };

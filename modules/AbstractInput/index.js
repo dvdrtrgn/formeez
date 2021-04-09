@@ -43,11 +43,15 @@ function isMulti(API) {
 // -------------------
 // CTOR
 
-function _api_factory() {
+function _api_factory(name) {
   var API = {};
 
   // Define accessors
   Object.defineProperties(API, {
+    name: {
+      value: name,
+      writable: false,
+    },
     _: {
       value: { // outline normals
         dataType: 'string',
@@ -59,9 +63,6 @@ function _api_factory() {
     },
     multiVal: {
       get: () => isMulti(API),
-    },
-    name: {
-      get: () => API._.name,
     },
     type: {
       get: () => API._.dom.type,
@@ -98,7 +99,7 @@ function _api_factory() {
 
 function AbstractInput(name, form) {
   name = ascertain(name).name;
-  var API = _api_factory();
+  var API = _api_factory(name);
   var query, dom;
 
   // ERRORS?
