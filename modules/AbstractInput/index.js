@@ -152,6 +152,12 @@ function AbstractInput(name, form) {
 
 export default AbstractInput;
 
+AbstractInput.libs = {
+  AbstractSelect,
+  AbstractRadio,
+  AbstractCheckbox,
+};
+
 /*
 
   data types

@@ -137,6 +137,12 @@ function AbstractForm(form) {
 
 export default AbstractForm;
 
+AbstractForm.libs = {
+  AbstractInput,
+  AbstractStorage,
+  Q,
+};
+
 /*
 
 

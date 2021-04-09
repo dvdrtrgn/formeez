@@ -27,3 +27,7 @@ const Klass = {
 };
 
 export default Klass;
+
+Klass.libs = {
+  Q,
+};

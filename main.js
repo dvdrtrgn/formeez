@@ -6,7 +6,7 @@ import AbstractForm from './modules/AbstractForm.js';
 import Util from './modules/Util.js';
 import Q from '../modules/Q.js';
 
-var API = {
+var Main = {
   libs: {
     AbstractForm,
     AbstractInput,
@@ -35,9 +35,13 @@ function init() {
 
   Foo = AbstractForm(Foo);
 
-  Util.export_to({ Main: API, Foo, Q, Util }, window)
+  Util.export_to({
+    Main,
+    Foo,
+    Q,
+  }, window)
 
-  console.table(API);
+  console.table(Main);
 }
 
 Util.ready(init);
