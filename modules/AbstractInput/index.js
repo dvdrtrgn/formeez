@@ -76,7 +76,7 @@ function _api_factory(name) {
     },
   });
 
-  // Private accessors
+  // PRIVATE accessors
   // nonstatic (main/nodes) as form fields might be added/removed
   Object.defineProperties(API._, {
     dom: {
@@ -98,9 +98,10 @@ function _api_factory(name) {
 }
 
 function AbstractInput(name, form) {
+  var API, query, dom;
+
   name = ascertain(name).name;
-  var API = _api_factory(name);
-  var query, dom;
+  API = _api_factory(name);
 
   // ERRORS?
   if (!name) throw Name + ': no name';
@@ -116,7 +117,7 @@ function AbstractInput(name, form) {
     form = document;
   }
 
-  // Assign props/meths
+  // Assign PRIVATE props/meths
   Object.assign(API._, {
     name,
     form,
@@ -135,6 +136,7 @@ function AbstractInput(name, form) {
     },
   });
 
+  // Mutate get/setters for types
   switch (API.type) {
     case 'radio':
       return AbstractRadio(API);

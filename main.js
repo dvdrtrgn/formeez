@@ -30,12 +30,12 @@ function preTweak() {
 }
 
 function init() {
-  var form = Q.one('#Foo');
+  var Foo = Q.one('#Foo');
   preTweak();
 
-  form = AbstractForm.make(form);
+  Foo = AbstractForm(Foo);
 
-  Util.export_to({ Main: API, form, Q, Util }, window)
+  Util.export_to({ Main: API, Foo, Q, Util }, window)
 
   console.table(API);
 }

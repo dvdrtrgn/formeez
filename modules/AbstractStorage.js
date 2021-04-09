@@ -2,57 +2,92 @@
 //
 const LS = localStorage;
 
-function save(obj) {
-  var str = JSON.stringify(obj.data);
+// -------------------
+// UTIL
 
-  LS.setItem(obj.name, str);
+function save(API) {
+  var str = JSON.stringify(API.data);
+
+  LS.setItem(API.name, str);
 }
 
-function backup(obj) {
-  var str = LS.getItem(obj.name);
+function backup(API) {
+  var str = LS.getItem(API.name);
 
   if (confirm('Rewrite backup data?')) {
-    LS.setItem(obj.name + '_bu', str);
+    LS.setItem(API.name + '_bu', str);
+
     return 'backup done!';
   }
   return 'skipping backup';
 }
 
-function restore(obj) {
-  var str = LS.getItem(obj.name + '_bu');
+function restore(API) {
+  var str = LS.getItem(API.name + '_bu');
 
-  LS.setItem(obj.name, str);
+  LS.setItem(API.name, str);
+
+  location.reload(); // TODO remove?
 }
 
-function open(obj) {
-  var str = LS.getItem(obj.name);
+function open(API) {
+  var str = LS.getItem(API.name);
 
   try {
-    obj.data = JSON.parse(str);
+    API.data = JSON.parse(str);
   } catch(err) {}
 
-  obj.data = obj.data || {};
+  API.data = API.data || {};
 }
 
-function make(str) {
-  if (!str) throw 'need name';
-  var obj = {};
+// -------------------
+// CTOR
 
-  obj = {
-    kind: 'AbstractStorage',
-    name: str,
+function _api_factory(name) {
+  var API = {};
+
+  // Define accessors
+  Object.defineProperties(API, {
+    name: {
+      value: name,
+      writable: false,
+    },
+    kind: {
+      value: 'AbstractStorage',
+      writable: false,
+    },
+    save: {
+      value: () => save(API),
+    },
+    backup: {
+      value: () => backup(API),
+    },
+    restore: {
+      value: () => restore(API),
+    },
+  });
+
+  return API;
+}
+
+function AbstractStorage(name) {
+  var API;
+
+  if (!name) throw 'need name';
+
+  API = _api_factory(name);
+
+  // Assign props/meths
+  Object.assign(API, {
     data: {},
-    save: () => save(obj),
-    backup: () => backup(obj),
-    restore: () => restore(obj),
-  };
+  });
 
-  open(obj);
+  open(API);
 
-  return obj;
+  return API;
 }
 
-export default { make };
+export default AbstractStorage;
 
 /*
 

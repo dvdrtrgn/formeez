@@ -4,17 +4,24 @@ import AbstractInput from './AbstractInput/index.js';
 import AbstractStorage from './AbstractStorage.js';
 import Q from './Q.js';
 
+const INPUTS = 'input[name], select[name], textarea[name]';
+
 function getInputs(form) {
-  return Q.all('input[name], select[name], textarea[name]', form);
+  if (!form) throw 'form needed';
+  return Q.all(INPUTS, form);
 }
+
+// -------------------
+// UTIL
 
 function nameHash(arr, obj = {}) {
   arr.forEach(e => (e.name in obj) ? void (0) : obj[e.name] = e);
   return obj;
 }
 
-function abstractInputs(form) {
-  var objs = getInputs(form);
+function abstractInputs(API) {
+  console.log(API.form)
+  var objs = getInputs(API.form);
   var arr = [];
 
   objs.forEach(function (e) {
@@ -24,79 +31,112 @@ function abstractInputs(form) {
   return arr;
 }
 
-function readForm(self) {
-  var objs = self.inputs;
+function readForm(API) {
+  var objs = Object.values(API.hash);
   var data = {};
 
   objs.forEach(e => {
     var nom = e.name;
     var val = e.value;
-
+    console.log('read', nom, val)
     data[nom] = val
   });
 
-  return self.data = data;
+  return API.data = data;
 }
 
-function loadForm(self) {
-  var inputs = self.inputs;
+function loadForm(API) {
+  var objs = Object.values(API.hash);
 
-  inputs.forEach(e => {
+  objs.forEach(e => {
     var nom = e.name;
-    var val = self.store.data[nom];
-    console.log('fill', nom, val)
+    var val = API.store.data[nom];
+    console.log('load', nom, val)
     e.value = val;
   });
 }
 
-function saveForm(self) {
-  self.store.data = self.readForm();
-  self.store.save();
+function saveForm(API) {
+  API.store.data = API.readForm();
+  API.store.save();
 }
 
-function initStorage(self) {
-  self.store = AbstractStorage.make(self.form.name);
+function initStorage(API) {
+  API.store = AbstractStorage(API.form.name);
 }
 
-function bindEvents(self) {
-  self.form.addEventListener('submit', function (evt) {
+function bindEvents(API) {
+  API.form.addEventListener('submit', function (evt) {
     // evt.preventDefault();
     console.log('saveForm');
-    saveForm(self);
+    saveForm(API);
   });
 }
 
-function make(form) {
-  var self;
+// -------------------
+// CTOR
+
+function _api_factory(form) {
+  var API = {};
+
+  // Define accessors
+  Object.defineProperties(API, {
+    form: {
+      value: form,
+      writable: false,
+    },
+    kind: {
+      value: 'AbstractForm',
+      writable: false,
+    },
+    hash: {
+      get: () => nameHash(API.inputs, {}),
+    },
+    read: {
+      value: () => readForm(API),
+    },
+    load: {
+      value: () => loadForm(API),
+    },
+  });
+
+  return API;
+}
+
+function AbstractForm(form) {
+  var API;
+
   form = Q.one(form); // normalize for one
 
+  // ERRORS?
   if (!form) throw 'nothing there';
   if (!form.nodeName === 'FORM') throw 'not a form';
   if (!form.name) form.name = form.id;
+  ///ERRORS?
 
-  self = {
-    form,
-    readForm: () => readForm(self),
-    loadForm: () => loadForm(self),
-  };
+  API = _api_factory(form);
 
-  self.inputs = abstractInputs(form);
-  self.hash = nameHash(self.inputs, {})
+  // Assign props/meths
+  Object.assign(API, {
+    d: form,
+    data: null,
+    scanForInputs: function () {
 
-  bindEvents(self);
-  initStorage(self);
-  loadForm(self);
+    },
+    inputs: abstractInputs(API),
+  });
 
-  return self;
+  bindEvents(API);
+  initStorage(API);
+  loadForm(API); // get from storage
+
+  return API;
 }
 
-export default { make };
+export default AbstractForm;
 
 /*
 
-attach to form
-  DATIFY ALL THE THINGS!
 
-  abstract form
 
 */
