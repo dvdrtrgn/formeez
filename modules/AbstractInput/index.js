@@ -3,6 +3,7 @@
 import AbstractSelect from './typeSelect.js';
 import AbstractRadio from './typeRadio.js';
 import AbstractCheckbox from './typeCheckbox.js';
+import Q from '../Q.js';
 
 const OptionTypes = ['checkbox', 'radio', 'select-one', 'select-multiple'];
 const Name = 'AbstractInput';
@@ -10,17 +11,15 @@ const Name = 'AbstractInput';
 // -------------------
 // UTIL
 
-function ascertain(arg) {
-  var ele = $(arg);
+function ascertain(query, scope) {
+  var ele = Q.normalize(query, scope);
 
   if (!ele.length) { // not element or useful selector?
-    if (typeof arg === 'string') {
-      ele = $(`[name=${arg}]`);
+    if (typeof query === 'string') {
+      ele = Q.all(`[name=${query}]`);
     }
-    ele = ele.length ? ele : $('<x>');
   }
-
-  return ele.get(0); // just the elements
+  return ele[0]; // just first element
 }
 
 function hasOptions(API) {
@@ -43,8 +42,10 @@ function isMulti(API) {
 // -------------------
 // CTOR
 
-function _api_factory(name) {
+function _api_factory(ele) {
   var API = {};
+  var name = ele.name;
+  var form = ele.form || document;
 
   // Define accessors
   Object.defineProperties(API, {
@@ -55,11 +56,14 @@ function _api_factory(name) {
     _: {
       value: { // outline normals
         dataType: 'string',
-        form: null,
-        name: null,
-        query: null,
+        form: form,
+        name: name,
+        query: `[name=${name}]`,
       },
       writable: false,
+    },
+    query: {
+      get: () => `[name=${name}]`,
     },
     multiVal: {
       get: () => isMulti(API),
@@ -99,31 +103,20 @@ function _api_factory(name) {
   return API;
 }
 
-function AbstractInput(name, form) {
-  var API, query, dom;
-
-  name = ascertain(name).name;
-  API = _api_factory(name);
+function AbstractInput(sel, form) {
+  var dom = ascertain(sel, form);
+  var API = _api_factory(dom);
 
   // ERRORS?
-  if (!name) throw Name + ': no name';
-  query = `[name=${name}]`;
-  dom = (form || document).querySelector(query);
   if (!dom) throw Name + ': no dom';
+  if (!dom.name) throw Name + ': no name';
   if (!dom.type) throw Name + ': no type';
   ///ERRORS?
 
-  if (!form) form = dom.form;
-  if (!form) {
-    console.warn('No form for ' + name);
-    form = document;
-  }
+  if (API.form === document) console.warn('No form for ' + dom.name);
 
   // Assign PRIVATE props/meths
   Object.assign(API._, {
-    name,
-    form,
-    query,
     get: function () {
       return API._.dom.value;
     },
@@ -149,8 +142,9 @@ function AbstractInput(name, form) {
       return AbstractSelect(API);
     default: return API;
   }
-
 }
+
+// -------------------
 
 export default AbstractInput;
 

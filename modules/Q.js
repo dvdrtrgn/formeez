@@ -1,11 +1,11 @@
 // Q.js
 //
-import { test, buildIndexCSSPath, fullPath } from './Q.junk.js';
+// import { test, buildIndexCSSPath, fullPath } from './Q.junk.js';
 
 const Q = {
-  buildIndexCSSPath,
-  fullPath,
-  test,
+  // buildIndexCSSPath,
+  // fullPath,
+  // test,
   type: function (arg) {
     if (!arg) return false;
     if (arg.jquery) return 'jquery';
