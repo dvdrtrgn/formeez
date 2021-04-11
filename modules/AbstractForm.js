@@ -9,55 +9,35 @@ const INPUTS = 'input[name], select[name], textarea[name]';
 // -------------------
 // UTIL
 
-function getInputs(form) {
-  if (!form) throw 'form needed';
+function getAllInputs(form) {
   return Q.all(INPUTS, form);
 }
 
-function nameHash(arr, obj = {}) {
+function hashByName(arr, obj = {}) {
   arr.forEach(e => (e.name in obj) ? void (0) : obj[e.name] = e);
-
   return obj;
+}
+
+function abstractInputs(form) {
+  var eles = getAllInputs(form);
+  var hash = hashByName(eles); // get first of each name
+  var arr = Object.values(hash); // return to array!
+
+  return arr.map((e) => AbstractInput(e, form));
+}
+
+function prepareData(objs, data = {}) {
+  objs.forEach(e => data[e.name] = e.value);
+  return data;
 }
 
 // -------------------
 // INTERNALS
 
-function abstractInputs(API) {
-  console.log(API.form)
-  var objs = getInputs(API.form);
-  var arr = [];
-
-  objs.forEach(function (e) {
-    arr.push(AbstractInput(e));
-  });
-
-  return arr;
-}
-
-function prepareData(API) {
-  var objs = Object.values(API.hash);
-  var data = {};
-
-  objs.forEach(e => {
-    var nom = e.name;
-    var val = e.value;
-
-    data[nom] = val
-  });
-
-  return data;
-}
-
 function loadStorage(API) {
-  var objs = Object.values(API.hash);
+  var data = API.store.data;
 
-  objs.forEach(e => {
-    var nom = e.name;
-    var val = API.store.data[nom];
-
-    e.value = val;
-  });
+  API.inputs.forEach(e => e.value = data[e.name]);
 }
 
 function saveForm(API) {
@@ -73,6 +53,22 @@ function bindEvents(API) {
     // evt.preventDefault();
     saveForm(API);
   });
+}
+
+function gatherInputs(API) {
+  API.inputs = abstractInputs(API.form);
+
+  return 'All inputs abstracted for ' + API.form.name;
+}
+
+function init(API) {
+  gatherInputs(API);
+  bindEvents(API);
+
+  initStorage(API);
+  loadStorage(API);
+
+  return API;
 }
 
 // -------------------
@@ -92,16 +88,22 @@ function _api_factory(form) {
       writable: false,
     },
     hash: {
-      get: () => nameHash(API.inputs, {}),
-    },
-    abstractInputs: {
-      get: () => abstractInputs(API),
+      get: () => hashByName(API.inputs, {}),
     },
     data: {
-      get: () => prepareData(API),
+      get: () => prepareData(API.inputs, {}),
     },
+    // prop
+    inputs: {
+      value: [],
+      writable: true,
+    },
+    // meth
     loadStorage: {
       value: () => loadStorage(API),
+    },
+    rescan: {
+      value: () => gatherInputs(API),
     },
   });
 
@@ -114,25 +116,14 @@ function AbstractForm(form) {
   form = Q.one(form); // normalize for one
 
   // ERRORS?
-  if (!form) throw 'nothing there';
-  if (!form.nodeName === 'FORM') throw 'not a form';
+  if (!form) throw 'NOTHING THERE';
+  if (!form.nodeName === 'FORM') throw 'NOT A FORM';
   if (!form.name) form.name = form.id;
   ///ERRORS?
 
   API = _api_factory(form);
 
-  // Assign props/meths
-  Object.assign(API, {
-    inputs: API.abstractInputs,
-    rawinputs: getInputs(API.form),
-  });
-
-  bindEvents(API);
-  initStorage(API);
-
-  API.loadStorage();
-
-  return API;
+  return init(API);
 }
 
 export default AbstractForm;

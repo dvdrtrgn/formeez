@@ -83,7 +83,9 @@ function _api_factory(name) {
       get: () => API._.form.querySelector(API._.query),
     },
     nodes: {
-      get: function (all) {
+      get: function () {
+        var all;
+
         if (isSelect(API)) {
           all = API._.dom.querySelectorAll('option');
         } else {

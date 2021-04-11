@@ -36,7 +36,7 @@ function read(API) {
 
   try {
     data = JSON.parse(str);
-  } catch(err) {}
+  } catch (err) { }
 
   return data || {};
 }
