@@ -134,14 +134,14 @@ function AbstractInput(sel, form) {
   // Mutate get/setters for types
   switch (API.type) {
     case 'radio':
-      return AbstractRadio(API);
+      AbstractRadio(API); break;
     case 'checkbox':
-      return AbstractCheckbox(API);
+      AbstractCheckbox(API); break;
     case 'select-one':
     case 'select-multiple':
-      return AbstractSelect(API);
-    default: return API;
+      AbstractSelect(API); break;
   }
+  return Object.seal(API);
 }
 
 // -------------------
@@ -156,12 +156,6 @@ AbstractInput.libs = {
 
 /*
 
-  data types
-    1: 'text', get/set [string]
-    2: radio, get/set [string] + options 'checked'
-    3: select [mixed] + options
-    3.1: select-one, get/set [string] 'selected'
-    3.2: select-multiple, get/set [array] 'selected 1+'
-    4: checkbox, get/set [mixed] + options 'checked 1+'
+
 
 */
