@@ -1,6 +1,7 @@
 // AbstractStorage.js
 //
 const LS = localStorage;
+const BU = ' (backup)';
 
 // -------------------
 // UTIL
@@ -9,7 +10,7 @@ function backup(API) {
   var str = LS.getItem(API.name);
 
   if (confirm('Rewrite backup data?')) {
-    LS.setItem(API.name + '_bu', str);
+    LS.setItem(API.name + BU, str);
 
     return 'backup done!';
   }
@@ -17,7 +18,7 @@ function backup(API) {
 }
 
 function restore(API) {
-  var str = LS.getItem(API.name + '_bu');
+  var str = LS.getItem(API.name + BU);
 
   LS.setItem(API.name, str);
 

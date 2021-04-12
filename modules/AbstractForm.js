@@ -9,6 +9,13 @@ const INPUTS = 'input[name], select[name], textarea[name]';
 // -------------------
 // UTIL
 
+function getDocPath(doc) {
+  var loc = doc.location;
+  var path = loc.pathname.replace('index.html', '');
+
+  return path;
+}
+
 function getAllInputs(form) {
   return Q.all(INPUTS, form);
 }
@@ -45,7 +52,10 @@ function saveForm(API) {
 }
 
 function initStorage(API) {
-  API.store = AbstractStorage(API.form.name);
+  var path = getDocPath(API.form.ownerDocument);
+  var fullname = API.form.name + ':' + path;
+
+  API.store = AbstractStorage(fullname);
 }
 
 function bindEvents(API) {
