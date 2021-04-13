@@ -1,0 +1,22 @@
+{
+  "name": "formeez",
+  "version": "1.0.0",
+  "description": "A breeding ground for micro-libs",
+  "main": "main.js",
+  "scripts": {
+    "test": "browser-sync start --server --files '**'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dvdrtrgn/formeez.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dvdrtrgn/formeez/issues"
+  },
+  "homepage": "https://github.com/dvdrtrgn/formeez#readme",
+  "devDependencies": {
+    "browser-sync": "^2.26.14"
+  }
+}
